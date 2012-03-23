@@ -248,7 +248,7 @@ add_form_proc do |date|
 				img_info << %Q|<span class="image-width">#{img_w}</span> x <span class="image-height">#{img_h}</span>|
 			end
 			tmp << %Q[<td id="image-info-#{id}">
-			<input type="checkbox" tabindex="#{tabidx+id*2}" name="plugin_image_id" value="#{id}">&nbsp;#{img_info}
+			<label><input type="checkbox" tabindex="#{tabidx+id*2}" name="plugin_image_id" value="#{id}">&nbsp;#{img_info}</label>
 			</td>]
 	   end
 		r << "</tr><tr>"
