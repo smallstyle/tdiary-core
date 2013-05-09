@@ -71,20 +71,29 @@ module TDiary
 			print 'Username: '
 			ARGV.replace([])
 			username = gets().chop
-			print 'New password: '
-			system "stty -echo"
-			password = $stdin.gets.chop
-			puts
-			print 'Re-type new password: '
-			password2 = $stdin.gets.chop
-			puts
-			system "stty echo"
-			if password != password2
-				raise StandardError, 'password verification error'
+			begin
+				print 'New password: '
+				system "stty -echo"
+				password = $stdin.gets.chop
+				puts
+				print 'Re-type new password: '
+				password2 = $stdin.gets.chop
+				puts
+				system "stty echo"
+				if password != password2
+					raise StandardError, 'Passwords do not match'
+				end
+				if password.empty?
+					raise StandardError, 'Password cannot be empty'
+				end
+			rescue
+				say "#{$!}. Please retry.", :red
+				retry
+			else
+				htpasswd = WEBrick::HTTPAuth::Htpasswd.new('.htpasswd')
+				htpasswd.set_passwd(nil, username, password)
+				htpasswd.flush
 			end
-			htpasswd = WEBrick::HTTPAuth::Htpasswd.new('.htpasswd')
-			htpasswd.set_passwd(nil, username, password)
-			htpasswd.flush
 		end
 
 		desc "version", "Prints the tDiary's version information"
